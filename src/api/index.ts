@@ -1,5 +1,6 @@
 import Router from "@koa/router";
 import { WebClient } from "@slack/web-api";
+import { createEventAdapter } from "@slack/events-api";
 
 import { SLACK_TOKEN } from "../../config/slack";
 

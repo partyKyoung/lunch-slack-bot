@@ -10,7 +10,14 @@ const port = 3000;
 
 app.use(bodyParser());
 
-router.use("/api", api.routes());
+// 슬랙 event test
+router.post("/slack", (ctx: any) => {
+  if (ctx.request.body.challenge) {
+    ctx.body = ctx.request.body.challenge;
+  }
+});
+
+app.use(router.routes()).use(router.allowedMethods());
 
 app.listen(port, () => {
   console.log(`Koa server is listening on port ${port}`);
