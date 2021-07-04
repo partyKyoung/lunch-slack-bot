@@ -10,12 +10,14 @@ const port = 3000;
 
 app.use(bodyParser());
 
-// 슬랙 event test
-router.post("/slack", (ctx: any) => {
-  if (ctx.request.body.challenge) {
-    ctx.body = ctx.request.body.challenge;
-  }
-});
+// // 슬랙 event test
+// router.post("/slack", (ctx: any) => {
+//   if (ctx.request.body.challenge) {
+//     ctx.body = ctx.request.body.challenge;
+//   }
+// });
+
+router.use("/api", api.routes());
 
 app.use(router.routes()).use(router.allowedMethods());
 
