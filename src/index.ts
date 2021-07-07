@@ -1,26 +1,35 @@
-import Koa from "koa";
-import Router from "@koa/router";
-import bodyParser from "koa-bodyparser";
+import express from "express";
+import { createEventAdapter } from "@slack/events-api";
+import { WebClient } from "@slack/web-api";
 
-import api from "./api";
+import { SLACK_TOKEN, SLACK_SIGNING_SECRET } from "../config/slack";
 
-const app = new Koa();
-const router = new Router();
-const port = 3000;
+const app = express();
+const slackEvents = createEventAdapter(SLACK_SIGNING_SECRET);
+const webClient = new WebClient(SLACK_TOKEN);
+const PORT = 3000;
 
-app.use(bodyParser());
+// slackEvents.on("message", async (event) => {
+//   console.log(event);
 
-// // 슬랙 event test
-// router.post("/slack", (ctx: any) => {
-//   if (ctx.request.body.challenge) {
-//     ctx.body = ctx.request.body.challenge;
+//   if (event.text === "test") {
+//     webClient.chat.postMessage({
+//       text: "안녕하세요!",
+//       channel: event.channel,
+//     });
 //   }
 // });
 
-router.use("/api", api.routes());
+app.post("/slack/lunch", (req, res) => {
+  console.log(req);
+  res.send({
+    response_type: "ephemeral",
+    text: "test",
+  });
+});
 
-app.use(router.routes()).use(router.allowedMethods());
+// app.use("/slack/events", slackEvents.requestListener());
 
-app.listen(port, () => {
-  console.log(`Koa server is listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log("Express app listeing port 3000");
 });
